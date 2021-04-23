@@ -1,7 +1,7 @@
 image:
 	docker build --no-cache -t srv .
 ctn-run:
-	docker run --name srv srv
+	docker run --name srv -p 7000:7000 srv
 ctn-rm:
 	docker container rm srv
 

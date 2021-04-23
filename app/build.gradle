@@ -34,6 +34,10 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+
+    // Javalin web server
+    compile 'io.javalin:javalin:3.13.6'
+    compile 'org.slf4j:slf4j-simple:1.7.30' // Javalin logger
 }
 
 application {
