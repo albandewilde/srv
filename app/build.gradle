@@ -38,6 +38,10 @@ dependencies {
     // Javalin web server
     compile 'io.javalin:javalin:3.13.6'
     compile 'org.slf4j:slf4j-simple:1.7.30' // Javalin logger
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.3' // Json serialisation used by javalin
+
+    // Tika user to detect mime type
+    compile 'org.apache.tika:tika-parsers:1.26'
 }
 
 application {
