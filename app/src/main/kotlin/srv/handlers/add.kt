@@ -1,63 +1,10 @@
-package srv
+package handlers
 
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 
 import io.javalin.http.Context
-import org.apache.tika.Tika
-
-// Actions on files presont on the server
-
-const val BASEDIR = "/files"
-
-// List files
-fun List(ctx: Context) {
-    val path = BASEDIR + ctx.path()
-    val f = File(path)
-
-    // Check if the directory of file exist
-    if (!f.exists()) {
-        ctx.status(404)
-        ctx.result("Directory of file not found")
-        return
-    }
-
-    // Check if it's a directory or a file
-    // If a directory we list his content
-    // Otherwise we serve the file
-    if (f.isDirectory()) {
-        var fls = mutableListOf<String>()
-        f.walk().forEach {
-            // Absulute path on disk
-            val absPath = it.toString()
-            fls.add(relPath(it))
-        }
-        ctx.json(fls)
-    } else {
-        val cnt = f.readBytes()
-        val mimeType = Tika().detect(f)
-        ctx.result(cnt).contentType(mimeType)
-    }
-}
-
-// Delete a file
-fun Delete(ctx: Context) {
-    val f = File(BASEDIR + rmTrailingSlash(ctx.path()))
-
-    // Check if file exist before deletion
-    if (!f.exists()) {
-        ctx.status(404)
-        ctx.result("File doesn't exist")
-        return
-    }
-
-    f.walk().forEach {
-        // If the path is the same as the file directory, we delete his content, not de directory him self
-        if (it.toString() != BASEDIR) it.deleteRecursively() else null
-    }
-    ctx.result("Deleted")
-}
 
 // Add a file
 fun Add(ctx: Context) {
@@ -117,12 +64,3 @@ fun Add(ctx: Context) {
         }
     }
 }
-
-// Remove trailing / in the url
-fun rmTrailingSlash(path: String) = if (path.last() == '/') path.slice(0 until path.length-1) else path
-
-// Get file name
-fun extractFileName(path: String) = rmTrailingSlash(path).split("/").last()
-
-// Remove the root directory to the path (hide it to the user)
-fun relPath(file: File) = ".${file.getAbsolutePath().slice(BASEDIR.length until file.getAbsolutePath().length)}${if (file.isDirectory()) "/" else ""}"

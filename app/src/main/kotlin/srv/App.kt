@@ -4,6 +4,8 @@ import io.javalin.Javalin
 import io.javalin.http.Context
 import io.javalin.apibuilder.ApiBuilder.*
 
+import handlers.*
+
 fun main() {
     val srv = Javalin.create{cfg ->
         cfg.requestLogger{ctx: Context, _ -> println("${ctx.method()} ${ctx.path()}")}
