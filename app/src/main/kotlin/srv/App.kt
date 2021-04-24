@@ -8,7 +8,7 @@ import handlers.*
 
 fun main() {
     val srv = Javalin.create{cfg ->
-        cfg.requestLogger{ctx: Context, _ -> println("${ctx.method()} ${ctx.path()}")}
+        cfg.requestLogger{ctx: Context, _ -> println("[${ctx.ip()}:${ctx.port()}] ${ctx.method()}:${ctx.path()}")}
         cfg.enableCorsForAllOrigins()
     }.start(7000)
 
